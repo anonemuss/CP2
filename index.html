@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="./css/styles.css"
+    </head>
+    <h1>C H U C K | N O R R I S | F A C T S</h1>
+    <body>
+        <div id=container class="row">
+            <div id=categories>
+                <h4>CATEGORIES</h4>
+            </div>
+            <div id="joke" class="col-sm align-self-center"></div>
+        </div>
+    </body>
+    
+    <div class="footer"><a href="https://www.github.com/anonemuss/">GitHub</a></div>
+    
+    <script>
+    
+    const randourl='https://api.chucknorris.io/jokes/random';
+
+    var str;
+    fetch(randourl).then(r => {
+        return r.json()
+    }).then(json =>{
+        console.log(json);
+        str = json;
+        document.getElementById("joke").innerHTML = '"' + str.value + '"';
+    })
+    
+    
+    const categorylist='https://api.chucknorris.io/jokes/categories';
+    var randomcat = document.createElement('div');
+    randomcat.className = 'category';
+    randomcat.innerHTML = 'random';
+    randomcat.id = 'random';
+    randomcat.setAttribute("style","width:50px");
+    randomcat.setAttribute("style","padding:2px");
+    randomcat.setAttribute("style","border-top: 2px solid grey");
+    randomcat.addEventListener('click', function(){
+        var str;
+        fetch(randourl).then(r => {
+            return r.json()
+        }).then(json =>{
+            console.log(json);
+            str = json;
+            document.getElementById("joke").innerHTML = '"' + str.value + '"';
+        })
+    });
+    document.getElementById("categories").appendChild(randomcat);
+    var arr;
+    fetch(categorylist).then(r => {
+        return r.json()
+    }).then(json =>{
+        console.log(json);
+        arr = json;
+        for(var i = 0; i < arr.length; i++){
+            var newElement = document.createElement('div');
+            newElement.id = arr[i];
+            newElement.className = 'category';
+            newElement.innerHTML = arr[i];
+            newElement.setAttribute("style","width:50px");
+            newElement.setAttribute("style","padding:2px");
+            newElement.addEventListener('click', function(){
+                var catsearch = 'https://api.chucknorris.io/jokes/random?category=' + this.innerHTML;
+                var str;
+                fetch(catsearch).then(r => {
+                    return r.json()
+                }).then(json =>{
+                    console.log(json);
+                    str = json;
+                    document.getElementById("joke").innerHTML = '"' + str.value + '"';
+                })
+            });
+            document.getElementById("categories").appendChild(newElement);
+        }
+    })
+    
+    function categorySearch(div){
+        var catsearch = 'https://api.chucknorris.io/jokes/random?category=';
+        var str;
+        fetch(catsearch += ('{'+ div + '}')).then(r => {
+            return r.json()
+        }).then(json =>{
+            console.log(json);
+            str = json;
+            document.getElementById("joke").innerHTML = '"' + str.value + '"';
+        })
+    }
+    
+    </script>
+</html>
